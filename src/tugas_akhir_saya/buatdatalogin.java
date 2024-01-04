@@ -3,6 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package tugas_akhir_saya;
+import com.mysql.cj.jdbc.PreparedStatementWrapper;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -10,11 +19,38 @@ package tugas_akhir_saya;
  */
 public class buatdatalogin extends javax.swing.JFrame {
 
+public DefaultTableModel model;
+ public static Statement sta;
+ ResultSet rs;
     /**
-     * Creates new form buatdatalogin
+     * Creates new form admin
      */
     public buatdatalogin() {
         initComponents();
+        setLocationRelativeTo(this);
+        Connection con = TUGAS_AKHIR_SAYA.getkoneksi();
+        model = (DefaultTableModel)tabeldatamhs.getModel();
+//        probono.setVisible(false);
+//        berbayar.setVisible(false);
+//        simpan.setVisible(false);
+//        hapus.setVisible(false);
+        
+        try{
+            sta = con.createStatement();
+            ResultSet re = sta.executeQuery("Select * from datamahasiswa");
+            
+            while(re.next()){
+                Object[] absensi = new Object[4];
+                absensi[0]=re.getString("nama");
+                absensi[1]=re.getString("nim");
+                absensi[2]=re.getString("kelas");
+                absensi[3]=re.getString("password");
+                model.addRow(absensi);
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Tidak Tampil Ke Tabel");
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -34,10 +70,14 @@ public class buatdatalogin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        kelastf = new javax.swing.JTextField();
+        passwordtf = new javax.swing.JTextField();
+        nimtf = new javax.swing.JTextField();
+        namatf = new javax.swing.JTextField();
+        submit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabeldatamhs = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,29 +124,66 @@ public class buatdatalogin extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("PASSWORD");
 
+        submit.setText("SUBMIT");
+        submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitActionPerformed(evt);
+            }
+        });
+
+        tabeldatamhs.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "NAMA", "NIM", "KELAS", "PASSWORD"
+            }
+        ));
+        jScrollPane1.setViewportView(tabeldatamhs);
+
+        jButton1.setText("HAPUS");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel2))
+                                        .addGap(63, 63, 63)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(submit)
+                                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(kelastf)
+                                                .addComponent(nimtf)
+                                                .addComponent(namatf, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(129, 129, 129)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passwordtf, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(377, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
@@ -115,22 +192,28 @@ public class buatdatalogin extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(namatf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nimtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(kelastf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(submit)
+                .addGap(76, 76, 76)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(99, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(150, 150, 150)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passwordtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(455, Short.MAX_VALUE)))
         );
 
@@ -175,6 +258,79 @@ public class buatdatalogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
+        // TODO add your handling code here:
+         String name = namatf.getText();
+        String nim = nimtf.getText();
+        String kelas = kelastf.getText();
+        String password = passwordtf.getText();
+
+        if (name.isEmpty()|| nim.isEmpty() || kelas.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Data tidak boleh kosong", "Registration Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // TODO: Add code to insert the registration information into your database
+    try {
+        Connection con = TUGAS_AKHIR_SAYA.getkoneksi();
+        String insertQuery = "INSERT INTO datamahasiswa (nama, nim, kelas, password) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, namatf.getText());
+            preparedStatement.setString(2, nimtf.getText());
+            preparedStatement.setString(3, kelastf.getText());
+            preparedStatement.setString(4, passwordtf.getText());
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Anda Berhasil Daftar", "Success", JOptionPane.INFORMATION_MESSAGE);
+            LOGIN login = new LOGIN();
+            login.setVisible(true);
+            this.dispose();
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Registration failed. Error: " + e.getMessage(), "Registration Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_submitActionPerformed
+
+    private void deleteDataFromDatabase(String nim) {
+    try {
+        Connection con = TUGAS_AKHIR_SAYA.getkoneksi();
+        String deleteQuery = "DELETE FROM datamahasiswa WHERE nim = ?";
+        
+        try (PreparedStatement preparedStatement = con.prepareStatement(deleteQuery)) {
+            preparedStatement.setString(1, nim);
+            preparedStatement.executeUpdate();
+        }
+        
+        JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Gagal menghapus data. Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+                                             
+    int selectedRow = tabeldatamhs.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) tabeldatamhs.getModel();
+    String nimToDelete = (String) model.getValueAt(selectedRow, 1); // Ambil nilai NIM dari baris yang dipilih
+
+    // Konfirmasi penghapusan
+    int confirmDialog = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+
+    if (confirmDialog == JOptionPane.YES_OPTION) {
+        // Lakukan penghapusan dari tabel dan database
+        model.removeRow(selectedRow);
+        deleteDataFromDatabase(nimToDelete); // Metode untuk menghapus data dari database
+    }
+   
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -211,6 +367,7 @@ public class buatdatalogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -219,9 +376,12 @@ public class buatdatalogin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField kelastf;
+    private javax.swing.JTextField namatf;
+    private javax.swing.JTextField nimtf;
+    private javax.swing.JTextField passwordtf;
+    private javax.swing.JButton submit;
+    private javax.swing.JTable tabeldatamhs;
     // End of variables declaration//GEN-END:variables
 }

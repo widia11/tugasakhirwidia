@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class lihat_absensi extends javax.swing.JFrame {
 
-  public DefaultTableModel model;
+ public DefaultTableModel model;
  public static Statement sta;
  ResultSet rs;
     /**

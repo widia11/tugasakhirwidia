@@ -15,6 +15,7 @@ public class beranda_admin extends javax.swing.JFrame {
      */
     public beranda_admin() {
         initComponents();
+        setLocationRelativeTo(this);
     }
 
     /**
