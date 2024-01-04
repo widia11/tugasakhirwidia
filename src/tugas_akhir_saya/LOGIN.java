@@ -152,7 +152,7 @@ public class LOGIN extends javax.swing.JFrame {
         } else {
         try {
         Connection koneksi = TUGAS_AKHIR_SAYA.getkoneksi();
-        PreparedStatement state = koneksi.prepareStatement("SELECT * FROM login Where username=? and password=?");
+        PreparedStatement state = koneksi.prepareStatement("SELECT * FROM datamahasiswa Where nim=? and password=?");
         state.setString(1, nodosen.getText());
         state.setString(2, passwordtf.getText());
         rs = state.executeQuery();

@@ -78,6 +78,7 @@ public DefaultTableModel model;
         jScrollPane1 = new javax.swing.JScrollPane();
         tabeldatamhs = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +149,13 @@ public DefaultTableModel model;
             }
         });
 
+        jButton2.setText("KE MENU UTAMA");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -177,7 +185,9 @@ public DefaultTableModel model;
                                                 .addComponent(namatf, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,7 +218,9 @@ public DefaultTableModel model;
                 .addGap(76, 76, 76)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap(99, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
@@ -260,18 +272,7 @@ public DefaultTableModel model;
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
-         String name = namatf.getText();
-        String nim = nimtf.getText();
-        String kelas = kelastf.getText();
-        String password = passwordtf.getText();
-
-        if (name.isEmpty()|| nim.isEmpty() || kelas.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Data tidak boleh kosong", "Registration Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    // TODO: Add code to insert the registration information into your database
-    try {
+try {
         Connection con = TUGAS_AKHIR_SAYA.getkoneksi();
         String insertQuery = "INSERT INTO datamahasiswa (nama, nim, kelas, password) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
@@ -281,15 +282,38 @@ public DefaultTableModel model;
             preparedStatement.setString(4, passwordtf.getText());
             preparedStatement.executeUpdate();
             JOptionPane.showMessageDialog(this, "Anda Berhasil Daftar", "Success", JOptionPane.INFORMATION_MESSAGE);
-            LOGIN login = new LOGIN();
-            login.setVisible(true);
-            this.dispose();
+            
+            // Setelah memasukkan data, panggil metode untuk menampilkan data di tabel
+            displayDataInTable();
         }
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "Registration failed. Error: " + e.getMessage(), "Registration Error", JOptionPane.ERROR_MESSAGE);
     }
+
     }//GEN-LAST:event_submitActionPerformed
 
+    private void displayDataInTable() {
+    model.setRowCount(0); // Hapus semua baris yang ada di tabel
+
+    try {
+        Connection con = TUGAS_AKHIR_SAYA.getkoneksi();
+        sta = con.createStatement();
+        ResultSet re = sta.executeQuery("Select * from datamahasiswa");
+
+        while (re.next()) {
+            Object[] absensi = new Object[4];
+            absensi[0] = re.getString("nama");
+            absensi[1] = re.getString("nim");
+            absensi[2] = re.getString("kelas");
+            absensi[3] = re.getString("password");
+            model.addRow(absensi);
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Tidak Tampil Ke Tabel");
+        System.out.println("Error: " + e.getMessage());
+    }
+}
+    
     private void deleteDataFromDatabase(String nim) {
     try {
         Connection con = TUGAS_AKHIR_SAYA.getkoneksi();
@@ -331,6 +355,13 @@ public DefaultTableModel model;
    
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        beranda_admin beranda = new beranda_admin();
+        beranda.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -368,6 +399,7 @@ public DefaultTableModel model;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
